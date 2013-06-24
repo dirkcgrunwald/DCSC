@@ -1,0 +1,16 @@
+#cloud-config
+
+apt_update: false
+apt_upgrade: false
+
+packages:
+  - sharutils
+  - python-pip
+  - git-core
+
+runcmd:
+  - [ pip, install, pika ]
+
+ssh_authorized_keys:
+ - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDEp+4wHGC8eI+UUnj3KGF8ksMsGep2OlahyTgHJL1JUZ9bYzZaNcs9wU2R6rlWbuBpoAfmyta9QuAwBCIMmfVzVdAHpT0Tz+W9rrBXR0AfLUszzuqnzB6hXiZHI1PtrU26sXL4FCYxoEJUQwBdl0MQ/N1LfKKnfYOGMCVcjbcd/IJLADiQXCvFQifGFFGbbrO9oNyeQPU0h5//E4wJObFcPewBDM5h4IBRWV6C1JbR5QWW4IWuV/g5WUueERSzBmVzDrqRse1saKAAJWR/kZLMm2GfYDF6AI68XJU96D7BQU1rqawjr3FaYw4rSr7/c47lfNs0ut7rWp6nxk68cprL grunwald@dirk-mac-air.esl
+

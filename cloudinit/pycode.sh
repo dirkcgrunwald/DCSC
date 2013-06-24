@@ -1,0 +1,319 @@
+#!/bin/sh
+# This is a shell archive (produced by GNU sharutils 4.11).
+# To extract the files from this archive, save it to some FILE, remove
+# everything before the `#!/bin/sh' line above, then type `sh FILE'.
+#
+lock_dir=_sh31244
+# Made on 2012-10-16 11:47 MDT by <grunwald@dirk-desktop>.
+# Source directory was `/local/grunwald/Dropbox/Cloud Computing Course/DSC/hmwk7'.
+#
+# Existing files will *not* be overwritten, unless `-c' is specified.
+#
+# This shar contains:
+# length mode       name
+# ------ ---------- ------------------------------------------
+#   1358 -rw-r--r-- client-fib.py
+#    774 -rw-r--r-- purge-queues.py
+#   1340 -rw-r--r-- request-fib.py
+#
+MD5SUM=${MD5SUM-md5sum}
+f=`${MD5SUM} --version | egrep '^md5sum .*(core|text)utils'`
+test -n "${f}" && md5check=true || md5check=false
+${md5check} || \
+  echo 'Note: not verifying md5sums.  Consider installing GNU coreutils.'
+if test "X$1" = "X-c"
+then keep_file=''
+else keep_file=true
+fi
+echo=echo
+save_IFS="${IFS}"
+IFS="${IFS}:"
+gettext_dir=
+locale_dir=
+set_echo=false
+
+for dir in $PATH
+do
+  if test -f $dir/gettext \
+     && ($dir/gettext --version >/dev/null 2>&1)
+  then
+    case `$dir/gettext --version 2>&1 | sed 1q` in
+      *GNU*) gettext_dir=$dir
+      set_echo=true
+      break ;;
+    esac
+  fi
+done
+
+if ${set_echo}
+then
+  set_echo=false
+  for dir in $PATH
+  do
+    if test -f $dir/shar \
+       && ($dir/shar --print-text-domain-dir >/dev/null 2>&1)
+    then
+      locale_dir=`$dir/shar --print-text-domain-dir`
+      set_echo=true
+      break
+    fi
+  done
+
+  if ${set_echo}
+  then
+    TEXTDOMAINDIR=$locale_dir
+    export TEXTDOMAINDIR
+    TEXTDOMAIN=sharutils
+    export TEXTDOMAIN
+    echo="$gettext_dir/gettext -s"
+  fi
+fi
+IFS="$save_IFS"
+if (echo "testing\c"; echo 1,2,3) | grep c >/dev/null
+then if (echo -n test; echo 1,2,3) | grep n >/dev/null
+     then shar_n= shar_c='
+'
+     else shar_n=-n shar_c= ; fi
+else shar_n= shar_c='\c' ; fi
+f=shar-touch.$$
+st1=200112312359.59
+st2=123123592001.59
+st2tr=123123592001.5 # old SysV 14-char limit
+st3=1231235901
+
+if touch -am -t ${st1} ${f} >/dev/null 2>&1 && \
+   test ! -f ${st1} && test -f ${f}; then
+  shar_touch='touch -am -t $1$2$3$4$5$6.$7 "$8"'
+
+elif touch -am ${st2} ${f} >/dev/null 2>&1 && \
+   test ! -f ${st2} && test ! -f ${st2tr} && test -f ${f}; then
+  shar_touch='touch -am $3$4$5$6$1$2.$7 "$8"'
+
+elif touch -am ${st3} ${f} >/dev/null 2>&1 && \
+   test ! -f ${st3} && test -f ${f}; then
+  shar_touch='touch -am $3$4$5$6$2 "$8"'
+
+else
+  shar_touch=:
+  echo
+  ${echo} 'WARNING: not restoring timestamps.  Consider getting and
+installing GNU `touch'\'', distributed in GNU coreutils...'
+  echo
+fi
+rm -f ${st1} ${st2} ${st2tr} ${st3} ${f}
+#
+if test ! -d ${lock_dir} ; then :
+else ${echo} "lock directory ${lock_dir} exists"
+     exit 1
+fi
+if mkdir ${lock_dir}
+then ${echo} "x - created lock directory ${lock_dir}."
+else ${echo} "x - failed to create lock directory ${lock_dir}."
+     exit 1
+fi
+# ============= client-fib.py ==============
+if test -n "${keep_file}" && test -f 'client-fib.py'
+then
+${echo} "x - SKIPPING client-fib.py (file already exists)"
+else
+${echo} "x - extracting client-fib.py (text)"
+  sed 's/^X//' << 'SHAR_EOF' > 'client-fib.py' &&
+#!/usr/bin/env python
+##
+## Client that accepts messages encoded as integers
+## computes the fibonacci of those numbers and returns
+## a string representation
+##
+X
+import time
+X
+while True:
+X    try:
+X        import pika
+X        break
+X    except ImportError:
+X        print "Waiting for Pika to become available"
+X        time.sleep(1)
+X
+QHost = "sdr.cs.colorado.edu"
+X
+connection = pika.BlockingConnection(
+X    pika.ConnectionParameters(host=QHost))
+X
+channel = connection.channel()
+X
+channel.queue_declare(queue='fib_to_compute', durable=True)
+channel.queue_declare(queue='fib_from_compute', durable=True)
+X
+print ' [*] Waiting for messages. To exit press CTRL+C'
+X
+def fib(n):
+X    if n < 1:
+X        return 1
+X    else:
+X        return fib(n-1) + fib(n-2)
+X
+def compute_fib(ch, method, properties, body):
+X    print " [x] Received %r" % (body,)
+X    ##
+X    ## If we don't do an ACK, this message will not be consumed
+X    ## and will be re-delivered
+X    ##
+X    channel.basic_publish(exchange='',
+X                          routing_key='fib_from_compute',
+X                          body=str(fib(int(body))),
+X                          properties=pika.BasicProperties(delivery_mode = 2))
+X    ch.basic_ack(delivery_tag = method.delivery_tag)
+X
+X
+channel.basic_qos(prefetch_count=1)
+channel.basic_consume(compute_fib, queue='fib_to_compute', no_ack=False)
+channel.start_consuming()
+SHAR_EOF
+  (set 20 12 10 16 11 46 16 'client-fib.py'
+   eval "${shar_touch}") && \
+  chmod 0644 'client-fib.py'
+if test $? -ne 0
+then ${echo} "restore of client-fib.py failed"
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'client-fib.py': 'MD5 check failed'
+       ) << \SHAR_EOF
+24b6c80c67d46ce89ee5531a1e4b5aba  client-fib.py
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'client-fib.py'` -ne 1358 && \
+  ${echo} "restoration warning:  size of 'client-fib.py' is not 1358"
+  fi
+fi
+# ============= purge-queues.py ==============
+if test -n "${keep_file}" && test -f 'purge-queues.py'
+then
+${echo} "x - SKIPPING purge-queues.py (file already exists)"
+else
+${echo} "x - extracting purge-queues.py (text)"
+  sed 's/^X//' << 'SHAR_EOF' > 'purge-queues.py' &&
+#!/usr/bin/env python
+##
+## Client that accepts messages encoded as integers
+## computes the fibonacci of those numbers and returns
+## a string representation
+##
+X
+import pika
+X
+QHost = "sdr.cs.colorado.edu"
+X
+connection = pika.BlockingConnection(
+X    pika.ConnectionParameters(host=QHost))
+X
+channel = connection.channel()
+X
+channel.queue_declare(queue='fib_to_compute', durable=True)
+channel.queue_declare(queue='fib_from_compute', durable=True)
+X
+def purge_fib(ch, method, properties, body):
+X    print "Purge ", body
+X    ch.basic_ack(delivery_tag = method.delivery_tag)
+X
+channel.basic_qos(prefetch_count=1)
+channel.basic_consume(purge_fib, queue='fib_to_compute', no_ack=False)
+channel.basic_consume(purge_fib, queue='fib_from_compute', no_ack=False)
+channel.start_consuming()
+SHAR_EOF
+  (set 20 12 10 16 10 46 51 'purge-queues.py'
+   eval "${shar_touch}") && \
+  chmod 0644 'purge-queues.py'
+if test $? -ne 0
+then ${echo} "restore of purge-queues.py failed"
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'purge-queues.py': 'MD5 check failed'
+       ) << \SHAR_EOF
+66e48b0a284ac305de50a3e241e8c16d  purge-queues.py
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'purge-queues.py'` -ne 774 && \
+  ${echo} "restoration warning:  size of 'purge-queues.py' is not 774"
+  fi
+fi
+# ============= request-fib.py ==============
+if test -n "${keep_file}" && test -f 'request-fib.py'
+then
+${echo} "x - SKIPPING request-fib.py (file already exists)"
+else
+${echo} "x - extracting request-fib.py (text)"
+  sed 's/^X//' << 'SHAR_EOF' > 'request-fib.py' &&
+#!/usr/bin/env python
+##
+## Client that accepts messages encoded as integers
+## computes the fibonacci of those numbers and returns
+## a string representation
+##
+X
+import pika
+import threading,time,sys
+X
+QHost = "sdr.cs.colorado.edu"
+X
+connection = pika.BlockingConnection(
+X    pika.ConnectionParameters(host=QHost))
+X
+recvchan = connection.channel()
+sendchan = connection.channel()
+X
+recvchan.queue_declare(queue='fib_to_compute', durable=True)
+recvchan.queue_declare(queue='fib_from_compute', durable=True)
+X
+def receive_fib(ch, method, properties, body):
+X    print " [x] Received %r" % (body,)
+X    ch.basic_ack(delivery_tag = method.delivery_tag)
+X
+class RecvThread(threading.Thread):
+X    def run(self):
+X        recvchan.basic_qos(prefetch_count=1)
+X        recvchan.basic_consume(receive_fib, queue='fib_from_compute', no_ack=False)
+X        recvchan.start_consuming()
+X
+recvThread = RecvThread()
+recvThread.start()
+while True:
+X    n = raw_input("Fib of what number (0 to exit)? > ")
+X    try:
+X        n = int(n)
+X    except ValueError:
+X        print "Enter an integer"
+X    if  n == 0 :
+X        break
+X    sendchan.basic_publish(exchange='',
+X                           routing_key='fib_to_compute',
+X                           body=str(n),
+X                           properties=pika.BasicProperties(delivery_mode = 2))
+X    print "Sent.."
+sys.exit(0)
+SHAR_EOF
+  (set 20 12 10 16 10 43 45 'request-fib.py'
+   eval "${shar_touch}") && \
+  chmod 0644 'request-fib.py'
+if test $? -ne 0
+then ${echo} "restore of request-fib.py failed"
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'request-fib.py': 'MD5 check failed'
+       ) << \SHAR_EOF
+c3ec8e617aec82c12b2b813836707d06  request-fib.py
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'request-fib.py'` -ne 1340 && \
+  ${echo} "restoration warning:  size of 'request-fib.py' is not 1340"
+  fi
+fi
+if rm -fr ${lock_dir}
+then ${echo} "x - removed lock directory ${lock_dir}."
+else ${echo} "x - failed to remove lock directory ${lock_dir}."
+     exit 1
+fi
+exit 0

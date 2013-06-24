@@ -1,0 +1,10 @@
+#cloud-config
+packages:
+  - rabbitmq-server
+  - protobuf-compiler
+  - zookeeper
+  - python-pip
+  - git-core
+
+runcmd:
+	- [ pip, install, pika ]

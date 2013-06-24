@@ -1,0 +1,43 @@
+#cloud-config
+
+apt_update: false
+apt_upgrade: false
+
+packages:
+  - rabbitmq-server
+  - protobuf-compiler
+  - zookeeper
+  - python-pip
+  - git-core
+
+
+runcmd:
+  - [ pip, install, pika ]
+
+ssh_authorized_keys:
+ - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDEp+4wHGC8eI+UUnj3KGF8ksMsGep2OlahyTgHJL1JUZ9bYzZaNcs9wU2R6rlWbuBpoAfmyta9QuAwBCIMmfVzVdAHpT0Tz+W9rrBXR0AfLUszzuqnzB6hXiZHI1PtrU26sXL4FCYxoEJUQwBdl0MQ/N1LfKKnfYOGMCVcjbcd/IJLADiQXCvFQifGFFGbbrO9oNyeQPU0h5//E4wJObFcPewBDM5h4IBRWV6C1JbR5QWW4IWuV/g5WUueERSzBmVzDrqRse1saKAAJWR/kZLMm2GfYDF6AI68XJU96D7BQU1rqawjr3FaYw4rSr7/c47lfNs0ut7rWp6nxk68cprL grunwald@dirk-mac-air.esl
+
+users:
+  - default
+  - name: foobar
+    gecos: Foo B. Bar
+    primary-group: foobar
+    groups: users
+    selinux-user: staff_u
+    expiredate: 2012-09-01
+    ssh-import-id: foobar
+    lock-passwd: false
+    passwd: $6$j212wezy$7H/1LT4f9/N3wpgNunhsIqtMj62OKiS3nyNwuizouQc3u7MbYCarYeAHWYPYb2FT.lbioDm2RrkJPb9BZMN1O/
+  - name: barfoo
+    gecos: Bar B. Foo
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: users, admin
+    ssh-import-id: None
+    lock-passwd: true
+    ssh-authorized-keys:
+      - <ssh pub key 1>
+      - <ssh pub key 2>
+  - name: cloudy
+    gecos: Magic Cloud App Daemon User
+    inactive: true
+    system: true

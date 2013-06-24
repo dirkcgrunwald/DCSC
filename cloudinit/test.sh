@@ -1,0 +1,9 @@
+cat <<EOF
+begin 644 pycode.sh
+M(R$O8FEN+W-H"B,@5&AI<R!I<R!A('-H96QL(&%R8VAI=F4@*'!R;V1U8V5D
+M(&)Y($=.52!S:&%R=71I;',@-"XQ,2DN"B,@5&\@97AT<F%C="!T:&4@9FEL
+M97,@9G)O;2!T:&ES(&%R8VAI=F4L('-A=F4@:70@=&\@<V]M92!&24Q%+"!R
+M96UO=F4*(R!E=F5R>71H:6YG(&)E9F]R92!T:&4@8",A+V)I;B]S:"<@;&EN
+M92!A8F]V92P@=&AE;B!T>7!E(&!S:"!&24Q%)RX*(PIL;V-K7V1I<CU?<V@S
+M,#(T-PHC($UA9&4@;VX@,C'Q,BTQ,"TQ-B'Q,3HP-"!-1%0@8GD@/&=R=6YW
+EOF

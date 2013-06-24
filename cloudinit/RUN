@@ -1,0 +1,2 @@
+#!/bin/sh
+euca-run-instances -k dcg-open -t m1.small --user-data-file=combined-userdata.txt ami-00000019

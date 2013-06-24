@@ -1,0 +1,5 @@
+PARTS = my-boothook.txt my-cloudconfig.txt
+combined-userdata.txt: $(PARTS)
+	write-mime-multipart --output=combined-userdata.txt \
+	my-boothook.txt:text/cloud-boothook \
+	my-cloudconfig.txt
